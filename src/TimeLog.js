@@ -69,7 +69,6 @@ export default function StickyHeadTable(props) {
           </TableBody>
         </Table>
       </TableContainer>
-    
     </Paper>
     
   );

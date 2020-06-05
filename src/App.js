@@ -1,16 +1,26 @@
 import React from 'react'
+import TopBar from './TopBar'
 import BottomBar from './BottomBar'
 import ClockInOut from './ClockInOut';
-import TopBar from './TopBar'
 import TimeLog from './TimeLog'
+import GraduateSurvey from './GraduateSurvey';
+import StudentEmployeeSurvey from './StudentEmployeeSurvey';
+import JobPost from './JobPost';
+import Chat from './Chat';
+import PaymentLog from './PaymentLog';
+import Progress from './Progress';
+import Transportation  from './Transportation';
+import Location from './Location';
+import Setting from './Setting';
+import Help from './Help'
 
 class App extends React.Component{
     state = {
-        page: 0,
+        page: 'Clock',
         time: new Date().toLocaleTimeString(),
         date: new Date().toLocaleDateString(),
         clockIn: [],
-        clockOut:[],
+        clockOut: [],
         working: false,
     }
 
@@ -18,7 +28,6 @@ class App extends React.Component{
         setInterval(this.getCurrentTime, 1000);
     }
 
-   
     clockIn = () => {
         let startedMoment = {
             date: this.state.date,
@@ -33,7 +42,11 @@ class App extends React.Component{
             time:'',
             timeAtLogIn: ''
         })
-        this.setState({ clockIn: newArray, clockOut: newArray2, working: true})
+        this.setState({
+            clockIn: newArray,
+            clockOut: newArray2,
+            working: true
+        })
     }
 
     clockOut = () => {
@@ -45,43 +58,79 @@ class App extends React.Component{
         let newArray = this.state.clockOut
         newArray.pop();
         newArray.push(endedMoment)
-        this.setState({ clockOut: newArray, working: false})
-    }
+        this.setState({
+            clockOut: newArray, 
+            working: false
+        });
+    };
 
     getCurrentTime = () => {
         let currentTime = new Date();
         this.setState({
            date: currentTime.toLocaleDateString(),
            time: currentTime.toLocaleTimeString(),
-        })
-    }
+        });
+    };
 
     changePage =(number)=>{
         this.setState({page:number})
-    }
+    };
 
     render(){
         return(
             <div>
-                <TopBar status={this.state.working} />
-                    {this.state.page === 0 ? <ClockInOut 
+                <TopBar changePage={this.changePage} status={this.state.working} page={this.state.page} />
+                {this.state.page === 'Clock'?
+                <ClockInOut 
+                
                     clockIn={this.clockIn}
                     clockOut={this.clockOut}
                     date={this.state.date}
                     time={this.state.time}
                     working={this.state.working}
-                   
+                    clockInArray={this.state.clockIn}
+                /> 
+                : null }
 
-                /> : null  }
-
-                {this.state.page=== 1? 
-                
+                {this.state.page === 'Time Log' ? 
                 <TimeLog 
                     clockIn={this.state.clockIn} 
                     clockOut={this.state.clockOut}
                     working={this.state.working}
-                
-                />: null}
+                />
+                : null }
+
+                {this.state.page === 'Live Chat' ? 
+                <Chat />
+                : null }
+
+                {this.state.page === 'Job Posting' ? 
+                <JobPost />
+                : null }
+
+                {this.state.page === 'Skill Survey' && 
+                <StudentEmployeeSurvey />}
+
+                {this.state.page === 'Graduate Survey' && 
+                <GraduateSurvey />}
+
+                {this.state.page === 'Progress' && 
+                <Progress />}
+
+                {this.state.page === 'Transportation' && 
+                <Transportation  />}
+
+                {this.state.page === 'Payment Log' && 
+                <PaymentLog />}
+
+                {this.state.page === 'Location' && 
+                <Location />}
+
+                {this.state.page === 'Setting' && 
+                <Setting />}
+
+                {this.state.page === 'Help' && 
+                <Help />}
 
                 <BottomBar
                     working={this.state.working}
@@ -90,7 +139,7 @@ class App extends React.Component{
                 />
             </div>
         )
-    }
-}
+    };
+};
 
 export default App;
